@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Login History</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            padding: 20px;
+            margin: 0;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        h1 {
+            color: #333;
+            margin: 0;
+        }
+        .user-card {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .user-info {
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        .login-history {
+            margin-left: 20px;
+        }
+        .login-entry {
+            margin: 5px 0;
+            color: #666;
+        }
+        .btn {
+            padding: 10px 20px;
+            background-color: #4481eb;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        .btn:hover {
+            background-color: #3461b8;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>User Login History</h1>
+            <a href="{{ url_for('admin') }}" class="btn">Back to Admin Panel</a>
+        </div>
+
+        {% for user in users %}
+        <div class="user-card">
+            <div class="user-info">
+                <h3>{{ user.username }}</h3>
+                <p>Email: {{ user.email }}</p>
+                <p>Registered: {{ user.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+                <p>Last Login: {{ user.last_login.strftime('%Y-%m-%d %H:%M:%S') if user.last_login else 'Never' }}</p>
+            </div>
+            
+            <div class="login-history">
+                <h4>Recent Logins:</h4>
+                {% if user.login_history %}
+                    {% for login in user.login_history %}
+                    <div class="login-entry">
+                        <span>{{ login.login_time.strftime('%Y-%m-%d %H:%M:%S') }}</span>
+                        <span>from IP: {{ login.ip_address }}</span>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p>No login history available</p>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</body>
+</html>
